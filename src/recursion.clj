@@ -142,16 +142,33 @@
       (concat (repeat n k) (un-frequencies (rest a-map))))))
 
 (defn my-take [n coll]
-  [:-])
+  (cond
+    (empty? coll) ()
+    (zero? n) ()
+    :else
+    (cons (first coll) (my-take (dec n) (rest coll)))))
 
 (defn my-drop [n coll]
-  [:-])
+  (cond
+    (empty? coll) ()
+    (zero? n) coll
+    :else
+    (my-drop (dec n) (rest coll))))
 
 (defn halve [a-seq]
-  [:-])
+  (let [half (int (/ (count a-seq) 2))]
+    [(my-take half a-seq) (my-drop half a-seq)]))
 
 (defn seq-merge [a-seq b-seq]
-  [:-])
+  (let [[long-seq short-seq] (if (= a-seq (seq-max a-seq b-seq))
+                               [a-seq b-seq]
+                               [b-seq a-seq])]
+    (if (empty? short-seq)
+      long-seq
+      (let [[min-elem same-seq rest-seq] (if (= (first a-seq) (min (first a-seq) (first b-seq)))
+                                           [(first a-seq) b-seq (rest a-seq)]
+                                           [(first b-seq) a-seq (rest b-seq)]) ]
+        (cons min-elem (seq-merge same-seq rest-seq))))))
 
 (defn merge-sort [a-seq]
   [:-])
